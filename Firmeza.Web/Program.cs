@@ -18,7 +18,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("Firmeza.Web")));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -82,6 +82,9 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        await context.Database.MigrateAsync();
+
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
@@ -98,6 +101,19 @@ using (var scope = app.Services.CreateScope())
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
         
         if (adminUser == null)
+        {
+            var newAdmin = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+            var result = await userManager.CreateAsync(newAdmin, "Admin123!");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(newAdmin, "Administrador");
+            }
+        }
+        else
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(adminUser);
+            await userManager.ResetPasswordAsync(adminUser, token, "Admin123!");
+        }
         {
             var newAdmin = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
             var result = await userManager.CreateAsync(newAdmin, "Admin123!");
@@ -123,9 +139,9 @@ else
     app.UseHsts();
 }
 
-app.UseCors("AllowAll");
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 

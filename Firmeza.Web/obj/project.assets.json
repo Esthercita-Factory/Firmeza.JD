@@ -6261,7 +6261,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
             "/home/cohorte5/Escritorio/Firmeza/Firmeza.Application/Firmeza.Application.csproj": {
@@ -6287,7 +6286,6 @@
     },
     "frameworks": {
       "net10.0": {
-        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "EPPlus": {
@@ -6773,7 +6771,7 @@
       "code": "NU1901",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'NuGet.Packaging' 6.12.1 has a known low severity vulnerability, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
+      "message": "El paquete \"NuGet.Packaging\" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
       "libraryId": "NuGet.Packaging",
       "targetGraphs": [
         "net10.0"
@@ -6783,7 +6781,7 @@
       "code": "NU1901",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'NuGet.Protocol' 6.12.1 has a known low severity vulnerability, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
+      "message": "El paquete \"NuGet.Protocol\" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
       "libraryId": "NuGet.Protocol",
       "targetGraphs": [
         "net10.0"

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "O76rlPLE678=",
+  "dgSpecHash": "D8UQ401akCE=",
   "success": true,
   "projectFilePath": "/home/cohorte5/Escritorio/Firmeza/Firmeza.Web/Firmeza.Web.csproj",
   "expectedPackageFiles": [
@@ -132,7 +132,7 @@
     {
       "code": "NU1901",
       "level": "Warning",
-      "message": "Package 'NuGet.Packaging' 6.12.1 has a known low severity vulnerability, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
+      "message": "El paquete \"NuGet.Packaging\" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
       "projectPath": "/home/cohorte5/Escritorio/Firmeza/Firmeza.Web/Firmeza.Web.csproj",
       "warningLevel": 1,
       "filePath": "/home/cohorte5/Escritorio/Firmeza/Firmeza.Web/Firmeza.Web.csproj",
@@ -144,7 +144,7 @@
     {
       "code": "NU1901",
       "level": "Warning",
-      "message": "Package 'NuGet.Protocol' 6.12.1 has a known low severity vulnerability, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
+      "message": "El paquete \"NuGet.Protocol\" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
       "projectPath": "/home/cohorte5/Escritorio/Firmeza/Firmeza.Web/Firmeza.Web.csproj",
       "warningLevel": 1,
       "filePath": "/home/cohorte5/Escritorio/Firmeza/Firmeza.Web/Firmeza.Web.csproj",
