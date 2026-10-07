@@ -1,0 +1,47 @@
+@model Firmeza.Web.ViewModels.CustomerViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Nuevo Cliente";
+}
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Document" class="form-label">Documento</label>
+                <input asp-for="Document" class="form-control" />
+                <span asp-validation-for="Document" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Nombre Completo</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Correo Electrónico</label>
+                <input asp-for="Email" class="form-control" type="email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Phone" class="form-label">Teléfono</label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Age" class="form-label">Edad (años)</label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+                <small class="text-muted">Ingrese la edad como un número entero. Será validado mediante try-catch en el backend.</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

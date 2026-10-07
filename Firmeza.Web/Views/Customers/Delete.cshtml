@@ -1,0 +1,37 @@
+@model Firmeza.Domain.Entities.Customer
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Eliminar Cliente";
+}
+
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">¿Está seguro que desea eliminar este cliente?</h4>
+    <p>Esta acción no se puede deshacer.</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Documento</dt>
+            <dd class="col-sm-9">@Model.Document</dd>
+            
+            <dt class="col-sm-3">Nombre</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+            
+            <dt class="col-sm-3">Correo</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+            
+            <dt class="col-sm-3">Teléfono</dt>
+            <dd class="col-sm-9">@Model.Phone</dd>
+            
+            <dt class="col-sm-3">Edad</dt>
+            <dd class="col-sm-9">@Model.Age</dd>
+        </dl>
+        
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

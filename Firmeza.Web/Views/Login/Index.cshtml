@@ -1,0 +1,17 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Acceso a Firmeza";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · Firmeza</title>
+    <link rel="stylesheet" href="~/dist/styles.css" asp-append-version="true" />
+</head>
+<body class="fz-body fz-body-acceso">
+    <app-login data-error="@ViewBag.Error" data-campo="@ViewBag.CampoError"></app-login>
+    <script src="~/dist/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+/* Estilos propios del layout por defecto (páginas secundarias: Privacy, Error).
+   Lo común a la portada y al acceso vive en ClientApp/src/styles.css. */
+
+.fz-principal {
+  flex: 1;
+  padding: 34px 20px 46px;
+}
+
+.fz-ficha {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--fz-panel);
+  border: 1px solid var(--fz-borde);
+  border-radius: 3px;
+  padding: 28px 30px 32px;
+}
+
+.fz-ficha h1 {
+  font-size: 27px;
+  margin: 0 0 18px;
+}
+
+.fz-ficha h2 {
+  font-size: 19px;
+  margin: 26px 0 8px;
+}
+
+.fz-ficha p {
+  margin: 0 0 14px;
+}
+
+.fz-ficha a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--fz-borde);
+}
+
+.fz-ficha a:hover {
+  color: var(--fz-oliva);
+  border-bottom-color: var(--fz-oliva);
+}
+
+.fz-ficha > p:last-child {
+  margin: 24px 0 0;
+}
+
+@media (min-width: 768px) {
+  .fz-principal {
+    padding: 48px 20px 60px;
+  }
+
+  .fz-ficha {
+    padding: 34px 38px 38px;
+  }
+}

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Firmeza.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+53c9b84778127cbe54b0fd2953aaf8c3cfa7f36c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Firmeza.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Firmeza.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

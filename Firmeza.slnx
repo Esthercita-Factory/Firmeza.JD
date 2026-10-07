@@ -1,3 +1,7 @@
 <Solution>
+  <Project Path="Firmeza.Domain/Firmeza.Domain.csproj" />
+  <Project Path="Firmeza.Application/Firmeza.Application.csproj" />
+  <Project Path="Firmeza.Infraestructure/Firmeza.Infraestructure.csproj" />
   <Project Path="Firmeza.Web/Firmeza.Web.csproj" />
+  <Project Path="Firmeza.Tests/Firmeza.Tests.csproj" />
 </Solution>

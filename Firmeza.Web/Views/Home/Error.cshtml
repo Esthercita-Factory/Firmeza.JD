@@ -1,0 +1,18 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h1>Ocurrió un error</h1>
+
+<p class="fz-nota">
+    No pudimos completar la operación. Vuelve a intentarlo en unos minutos; si el problema
+    continúa, avisa a soporte indicando la hora del hecho.
+</p>
+
+@if (Model?.ShowRequestId == true)
+{
+    <p class="fz-nota">Identificador de la solicitud: <code>@Model.RequestId</code></p>
+}
+
+<p><a href="/">Volver a la portada</a></p>

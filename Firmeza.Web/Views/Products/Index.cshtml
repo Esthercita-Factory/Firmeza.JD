@@ -1,0 +1,67 @@
+@model IEnumerable<Firmeza.Domain.Entities.Product>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Gestión de Productos";
+}
+
+@section HeaderActions {
+    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Nuevo Producto</a>
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h6 class="mb-0 text-dark">Inventario</h6>
+        <form asp-action="Index" method="get" class="d-flex">
+            <div class="input-group input-group-sm">
+                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Buscar producto..." />
+                <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Estado</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(!Model.Any()) {
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">No se encontraron productos.</td>
+                        </tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="fw-medium text-dark">@item.Name</div>
+                                <div class="small text-muted text-truncate" style="max-width: 200px;">@item.Description</div>
+                            </td>
+                            <td class="fw-medium">$@item.Price.ToString("N2")</td>
+                            <td>@item.Stock</td>
+                            <td>
+                                @if(item.Stock > 10) {
+                                    <span class="badge badge-soft-success rounded-pill">En Stock</span>
+                                } else if (item.Stock > 0) {
+                                    <span class="badge badge-soft-warning rounded-pill">Stock Bajo</span>
+                                } else {
+                                    <span class="badge badge-soft-danger rounded-pill">Agotado</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-light text-primary me-1" data-bs-toggle="tooltip" title="Editar"><i class="bi bi-pencil"></i></a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-light text-danger" data-bs-toggle="tooltip" title="Eliminar"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

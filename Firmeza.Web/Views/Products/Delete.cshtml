@@ -1,0 +1,34 @@
+@model Firmeza.Domain.Entities.Product
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Eliminar Producto";
+}
+
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">¿Está seguro que desea eliminar este producto?</h4>
+    <p>Esta acción no se puede deshacer.</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-2">Nombre</dt>
+            <dd class="col-sm-10">@Model.Name</dd>
+            
+            <dt class="col-sm-2">Descripción</dt>
+            <dd class="col-sm-10">@Model.Description</dd>
+            
+            <dt class="col-sm-2">Precio</dt>
+            <dd class="col-sm-10">$@Model.Price.ToString("N2")</dd>
+            
+            <dt class="col-sm-2">Stock</dt>
+            <dd class="col-sm-10">@Model.Stock</dd>
+        </dl>
+        
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

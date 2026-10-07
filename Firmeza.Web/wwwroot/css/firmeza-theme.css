@@ -1,0 +1,188 @@
+:root {
+    --fz-primary: #2C7BE5;
+    --fz-primary-hover: #1a68d1;
+    --fz-bg-light: #F5F7FB;
+    --fz-text-main: #344050;
+    --fz-text-muted: #748194;
+    --fz-success: #00D27A;
+    --fz-danger: #E63757;
+    --fz-warning: #F5803E;
+    --fz-white: #FFFFFF;
+    --fz-border: #E3E6ED;
+    --fz-sidebar-bg: #121E2D;
+    --fz-sidebar-text: #A0B2C6;
+    --fz-sidebar-active: #2C7BE5;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--fz-bg-light);
+    color: var(--fz-text-main);
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: var(--fz-sidebar-bg);
+    min-height: 100vh;
+    color: var(--fz-sidebar-text);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.sidebar .brand {
+    color: var(--fz-white);
+    font-weight: 700;
+    font-size: 1.5rem;
+    padding: 1.5rem 1rem;
+    display: block;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar .nav-link {
+    color: var(--fz-sidebar-text);
+    padding: 0.8rem 1.25rem;
+    font-weight: 500;
+    border-radius: 0.375rem;
+    margin: 0.25rem 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar .nav-link:hover {
+    color: var(--fz-white);
+    background-color: rgba(255,255,255,0.05);
+}
+
+.sidebar .nav-link.active {
+    color: var(--fz-white);
+    background-color: var(--fz-sidebar-active);
+}
+
+.sidebar-icon {
+    width: 24px;
+    display: inline-block;
+}
+
+/* Topbar */
+.topbar {
+    background-color: var(--fz-white);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    padding: 0.75rem 1.5rem;
+    z-index: 999;
+}
+
+.topbar .search-input {
+    border-radius: 2rem;
+    padding-left: 2.5rem;
+    background-color: var(--fz-bg-light);
+    border: 1px solid transparent;
+}
+.topbar .search-input:focus {
+    background-color: var(--fz-white);
+    border-color: var(--fz-primary);
+    box-shadow: 0 0 0 0.25rem rgba(44, 123, 229, 0.25);
+}
+
+.topbar .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--fz-text-muted);
+}
+
+/* Cards & Containers */
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    margin-bottom: 1.5rem;
+    background-color: var(--fz-white);
+}
+
+.card-header {
+    background-color: var(--fz-white);
+    border-bottom: 1px solid var(--fz-border);
+    padding: 1.25rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+/* KPI Cards */
+.kpi-card .kpi-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+}
+.kpi-card .kpi-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--fz-text-main);
+    margin: 0;
+}
+.kpi-card .kpi-label {
+    color: var(--fz-text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--fz-primary);
+    border-color: var(--fz-primary);
+}
+.btn-primary:hover {
+    background-color: var(--fz-primary-hover);
+    border-color: var(--fz-primary-hover);
+}
+
+/* Tables */
+.table {
+    margin-bottom: 0;
+    color: var(--fz-text-main);
+}
+.table th {
+    font-weight: 600;
+    color: var(--fz-text-muted);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--fz-border);
+    padding: 1rem;
+}
+.table td {
+    vertical-align: middle;
+    padding: 1rem;
+    border-bottom: 1px solid var(--fz-border);
+}
+.table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+.table tbody tr:hover {
+    background-color: rgba(44, 123, 229, 0.03);
+}
+
+/* Badges */
+.badge-soft-success {
+    background-color: rgba(0, 210, 122, 0.15);
+    color: #00864e;
+}
+.badge-soft-danger {
+    background-color: rgba(230, 55, 87, 0.15);
+    color: #b31633;
+}
+.badge-soft-warning {
+    background-color: rgba(245, 128, 62, 0.15);
+    color: #b05118;
+}
+
+/* Content Area */
+.main-content {
+    min-height: calc(100vh - 60px);
+    padding: 2rem 1.5rem;
+}

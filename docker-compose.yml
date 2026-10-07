@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    container_name: firmeza_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: firmeza_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: firmeza_web
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Database=firmeza_db;Username=postgres;Password=mysecretpassword
+
+volumes:
+  pgdata:

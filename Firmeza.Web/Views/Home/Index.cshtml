@@ -1,0 +1,243 @@
+@model Firmeza.Web.ViewModels.DashboardViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Dashboard";
+}
+
+@section HeaderActions {
+    <div>
+        <button class="btn btn-outline-primary btn-sm me-2"><i class="bi bi-download me-1"></i> Exportar</button>
+        <button class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i> Nueva Venta</button>
+    </div>
+}
+
+<!-- Alert Banner -->
+<div class="alert alert-primary d-flex align-items-center mb-4 border-0 shadow-sm" role="alert" style="background-color: rgba(44, 123, 229, 0.1); color: var(--fz-primary);">
+    <i class="bi bi-info-circle-fill flex-shrink-0 me-3 fs-4"></i>
+    <div>
+        <strong>¡Buen día, Administrador!</strong> Tienes 3 productos con stock bajo que requieren tu atención hoy.
+    </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="row g-4 mb-4">
+    <!-- Products -->
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100 mb-0 kpi-card">
+            <div class="card-body d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="kpi-label">Total Productos</h6>
+                    <h3 class="kpi-value">@Model.ProductCount</h3>
+                    <div class="mt-2">
+                        <span class="badge rounded-pill @(Model.ProductIsPositive ? "badge-soft-success" : "badge-soft-danger")">
+                            <i class="bi @(Model.ProductIsPositive ? "bi-arrow-up-short" : "bi-arrow-down-short")"></i> @Model.ProductVariation
+                        </span>
+                    </div>
+                </div>
+                <div class="kpi-icon text-primary bg-primary bg-opacity-10">
+                    <i class="bi bi-box"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Customers -->
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100 mb-0 kpi-card">
+            <div class="card-body d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="kpi-label">Clientes Activos</h6>
+                    <h3 class="kpi-value">@Model.CustomerCount</h3>
+                    <div class="mt-2">
+                        <span class="badge rounded-pill @(Model.CustomerIsPositive ? "badge-soft-success" : "badge-soft-danger")">
+                            <i class="bi @(Model.CustomerIsPositive ? "bi-arrow-up-short" : "bi-arrow-down-short")"></i> @Model.CustomerVariation
+                        </span>
+                    </div>
+                </div>
+                <div class="kpi-icon text-success bg-success bg-opacity-10">
+                    <i class="bi bi-people"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sales -->
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100 mb-0 kpi-card">
+            <div class="card-body d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="kpi-label">Ventas (7d)</h6>
+                    <h3 class="kpi-value">@Model.SalesCount</h3>
+                    <div class="mt-2">
+                        <span class="badge rounded-pill @(Model.SalesIsPositive ? "badge-soft-success" : "badge-soft-danger")">
+                            <i class="bi @(Model.SalesIsPositive ? "bi-arrow-up-short" : "bi-arrow-down-short")"></i> @Model.SalesVariation
+                        </span>
+                    </div>
+                </div>
+                <div class="kpi-icon text-warning bg-warning bg-opacity-10">
+                    <i class="bi bi-cart"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Revenue -->
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100 mb-0 kpi-card">
+            <div class="card-body d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="kpi-label">Ingresos Totales</h6>
+                    <h3 class="kpi-value">$@Model.TotalSalesAmount.ToString("N2")</h3>
+                    <div class="mt-2">
+                        <span class="badge rounded-pill @(Model.AmountIsPositive ? "badge-soft-success" : "badge-soft-danger")">
+                            <i class="bi @(Model.AmountIsPositive ? "bi-arrow-up-short" : "bi-arrow-down-short")"></i> @Model.AmountVariation
+                        </span>
+                    </div>
+                </div>
+                <div class="kpi-icon text-info bg-info bg-opacity-10">
+                    <i class="bi bi-currency-dollar"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Chart -->
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 text-dark">Flujo de Ventas</h6>
+                <select class="form-select form-select-sm w-auto">
+                    <option value="7" selected>Últimos 7 días</option>
+                    <option value="30">Últimos 30 días</option>
+                    <option value="365">Este año</option>
+                </select>
+            </div>
+            <div class="card-body">
+                <div style="position: relative; height: 320px; width: 100%;">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Sales -->
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 text-dark">Compras Recientes</h6>
+                <a href="@Url.Action("Index", "Sales")" class="btn btn-link btn-sm p-0 text-decoration-none">Ver todas</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(!Model.RecentSales.Any())
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">No hay ventas recientes.</td>
+                                </tr>
+                            }
+                            @foreach(var sale in Model.RecentSales)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-medium text-dark">@sale.CustomerName</div>
+                                        <div class="small text-muted">@sale.Date.ToShortDateString()</div>
+                                    </td>
+                                    <td class="fw-bold text-dark">$@sale.Amount.ToString("N2")</td>
+                                    <td>
+                                        <span class="badge badge-soft-success rounded-pill">@sale.Status</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            
+            // Create a gradient for the area chart
+            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(44, 123, 229, 0.5)');   
+            gradient.addColorStop(1, 'rgba(44, 123, 229, 0.0)');
+
+            const chartData = {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartLabels)),
+                datasets: [{
+                    label: 'Ventas ($)',
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartData)),
+                    borderColor: '#2C7BE5',
+                    backgroundColor: gradient,
+                    borderWidth: 2,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#2C7BE5',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true,
+                    tension: 0.4 // Curve the line slightly
+                }]
+            };
+
+            const config = {
+                type: 'line',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#344050',
+                            padding: 10,
+                            titleFont: { family: 'Inter', size: 13 },
+                            bodyFont: { family: 'Inter', size: 13 },
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#E3E6ED', borderDash: [5, 5] },
+                            ticks: {
+                                font: { family: 'Inter', size: 12 },
+                                color: '#748194',
+                                callback: function(value) { return '$' + value; }
+                            },
+                            border: { display: false }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter', size: 12 }, color: '#748194' },
+                            border: { color: '#E3E6ED' }
+                        }
+                    },
+                    interaction: { mode: 'index', intersect: false }
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+}

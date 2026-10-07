@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · Firmeza</title>
+    <link rel="stylesheet" href="~/dist/styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/_Layout.css" asp-append-version="true" />
+</head>
+<body class="fz-body">
+    <a class="fz-saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="fz-barra">
+        <div class="fz-barra-interior">
+            <a class="fz-marca" href="/">
+                <span class="fz-sigla">FZ</span>
+                <span class="fz-marca-texto">FIRMEZA</span>
+            </a>
+
+            <details class="fz-menu">
+                <summary class="fz-menu-boton">Men&uacute;</summary>
+                <nav class="fz-menu-lista" aria-label="Men&uacute; principal">
+                    <a href="/">Inicio</a>
+                    <a href="/#modulos">M&oacute;dulos</a>
+                    <a href="/#novedades">Novedades</a>
+                    <a href="/#contacto">Contacto</a>
+                    <a class="fz-btn fz-btn-1" href="/Login">Entrar</a>
+                </nav>
+            </details>
+
+            <nav class="fz-nav" aria-label="Navegaci&oacute;n principal">
+                <a href="/">Inicio</a>
+                <a href="/#modulos">M&oacute;dulos</a>
+                <a href="/#novedades">Novedades</a>
+                <a href="/#contacto">Contacto</a>
+                <a class="fz-btn fz-btn-1" href="/Login">Entrar</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="contenido" class="fz-principal">
+        <div class="fz-ficha">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="fz-pie">
+        <div class="fz-pie-interior">
+            <p class="fz-pie-texto">&copy; @DateTime.Now.Year Firmeza Software de Inventario</p>
+            <nav class="fz-pie-enlaces" aria-label="Enlaces legales">
+                <a href="/Home/Privacy">T&eacute;rminos</a>
+                <a href="/Home/Privacy">Privacidad</a>
+                <a href="/#contacto">Soporte</a>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>

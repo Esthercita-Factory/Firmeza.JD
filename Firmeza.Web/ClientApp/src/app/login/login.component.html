@@ -1,0 +1,56 @@
+<div class="fz-acceso-envoltura">
+  <div class="fz-acceso">
+    <span class="fz-sigla">FZ</span>
+
+    <h1>Acceso a Firmeza</h1>
+    <p class="fz-acceso-sub">Control de inventario y almac&eacute;n</p>
+
+    @if (error) {
+      <div class="fz-aviso" role="alert">
+        <p><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> {{ error }}</p>
+      </div>
+    }
+
+    <form method="post" action="/Login" novalidate>
+      <div class="fz-campo">
+        <label for="correo">Correo</label>
+        <input
+          type="email"
+          class="form-control"
+          id="correo"
+          name="correo"
+          autocomplete="username"
+          placeholder="nombre@firmeza.cl"
+          [class.is-invalid]="correoInvalido"
+        />
+      </div>
+
+      <div class="fz-campo">
+        <label for="clave">Contrase&ntilde;a</label>
+        <input
+          type="password"
+          class="form-control"
+          id="clave"
+          name="clave"
+          autocomplete="current-password"
+          [class.is-invalid]="claveInvalida"
+        />
+        <div class="fz-ayuda">
+          <a href="mailto:contacto@firmeza.cl">&iquest;Olvidaste tu clave?</a>
+        </div>
+      </div>
+
+      <label class="fz-recordar" for="recordar">
+        <input type="checkbox" id="recordar" name="recordar" value="true" />
+        Recordar esta sesi&oacute;n en este equipo
+      </label>
+
+      <button type="submit" class="fz-btn fz-btn-1 fz-enviar">Iniciar sesi&oacute;n</button>
+    </form>
+
+    <div class="fz-acceso-pie">
+      Acceso restringido a personal autorizado.
+      <a href="/">Volver a la portada</a>
+    </div>
+  </div>
+</div>
