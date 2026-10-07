@@ -1,6 +1,16 @@
+using System.Text;
+using Firmeza.Application.Services.Auth;
+using Firmeza.Application.Services.Customers;
+using Firmeza.Application.Services.Dashboard;
+using Firmeza.Application.Services.Products;
+using Firmeza.Application.Services.Sales;
 using Firmeza.Infraestructure.Persistence;
+using Firmeza.Infraestructure.Security;
+using Firmeza.Infraestructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +24,6 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
         options.SignIn.RequireConfirmedAccount = false;
-        // Opciones de contraseña más flexibles para desarrollo
         options.Password.RequireDigit = false;
         options.Password.RequireLowercase = false;
         options.Password.RequireNonAlphanumeric = false;
@@ -24,17 +33,50 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.ConfigureApplicationCookie(options =>
+// Add JWT Authentication
+var secret = builder.Configuration["JwtSettings:Secret"] ?? "SuperSecretKeyForFirmezaApplicationWithEnoughLength2026";
+var issuer = builder.Configuration["JwtSettings:Issuer"] ?? "Firmeza";
+var audience = builder.Configuration["JwtSettings:Audience"] ?? "FirmezaClient";
+
+builder.Services.AddAuthentication(options =>
 {
-    options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/AccessDenied";
+    // We set default scheme to JWT to support APIs
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = audience,
+        ValidIssuer = issuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+    };
 });
 
-builder.Services.AddControllersWithViews();
+// Register Application Services
+builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ISaleService, SaleService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+
+builder.Services.AddControllers();
+
+// Add CORS to allow Angular dev server
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
 
 var app = builder.Build();
 
-// ----- SEEDER DE DATOS INICIALES -----
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -43,7 +85,6 @@ using (var scope = app.Services.CreateScope())
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
-        // Crear roles
         string[] roleNames = { "Administrador", "Cliente" };
         foreach (var roleName in roleNames)
         {
@@ -53,7 +94,6 @@ using (var scope = app.Services.CreateScope())
             }
         }
 
-        // Crear usuario admin por defecto
         var adminEmail = "admin@firmeza.com";
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
         
@@ -73,7 +113,6 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "Ocurrió un error al seedear los datos.");
     }
 }
-// ------------------------------------
 
 if (app.Environment.IsDevelopment())
 {
@@ -81,17 +120,16 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
+app.UseCors("AllowAll");
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+// Route configuration
+app.MapControllers();
 
 app.Run();

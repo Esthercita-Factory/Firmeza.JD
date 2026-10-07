@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "FAQmHEcp008=",
+  "dgSpecHash": "O76rlPLE678=",
   "success": true,
   "projectFilePath": "/home/cohorte5/Escritorio/Firmeza/Firmeza.Web/Firmeza.Web.csproj",
   "expectedPackageFiles": [
@@ -56,9 +56,11 @@
     "/home/cohorte5/.nuget/packages/humanizer.core.zh-cn/2.14.1/humanizer.core.zh-cn.2.14.1.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/humanizer.core.zh-hans/2.14.1/humanizer.core.zh-hans.2.14.1.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/humanizer.core.zh-hant/2.14.1/humanizer.core.zh-hant.2.14.1.nupkg.sha512",
+    "/home/cohorte5/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/10.0.12/microsoft.aspnetcore.authentication.jwtbearer.10.0.12.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.aspnetcore.diagnostics.entityframeworkcore/10.0.12/microsoft.aspnetcore.diagnostics.entityframeworkcore.10.0.12.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.aspnetcore.identity.entityframeworkcore/10.0.12/microsoft.aspnetcore.identity.entityframeworkcore.10.0.12.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.aspnetcore.razor.language/6.0.24/microsoft.aspnetcore.razor.language.6.0.24.nupkg.sha512",
+    "/home/cohorte5/.nuget/packages/microsoft.bcl.cryptography/10.0.2/microsoft.bcl.cryptography.10.0.2.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.build/17.11.48/microsoft.build.17.11.48.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.build.framework/18.0.2/microsoft.build.framework.18.0.2.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.codeanalysis.analyzers/3.11.0/microsoft.codeanalysis.analyzers.3.11.0.nupkg.sha512",
@@ -81,6 +83,12 @@
     "/home/cohorte5/.nuget/packages/microsoft.entityframeworkcore.relational/10.0.12/microsoft.entityframeworkcore.relational.10.0.12.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.entityframeworkcore.tools/10.0.12/microsoft.entityframeworkcore.tools.10.0.12.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.extensions.dependencymodel/10.0.12/microsoft.extensions.dependencymodel.10.0.12.nupkg.sha512",
+    "/home/cohorte5/.nuget/packages/microsoft.identitymodel.abstractions/8.19.2/microsoft.identitymodel.abstractions.8.19.2.nupkg.sha512",
+    "/home/cohorte5/.nuget/packages/microsoft.identitymodel.jsonwebtokens/8.19.2/microsoft.identitymodel.jsonwebtokens.8.19.2.nupkg.sha512",
+    "/home/cohorte5/.nuget/packages/microsoft.identitymodel.logging/8.19.2/microsoft.identitymodel.logging.8.19.2.nupkg.sha512",
+    "/home/cohorte5/.nuget/packages/microsoft.identitymodel.protocols/8.19.2/microsoft.identitymodel.protocols.8.19.2.nupkg.sha512",
+    "/home/cohorte5/.nuget/packages/microsoft.identitymodel.protocols.openidconnect/8.19.2/microsoft.identitymodel.protocols.openidconnect.8.19.2.nupkg.sha512",
+    "/home/cohorte5/.nuget/packages/microsoft.identitymodel.tokens/8.19.2/microsoft.identitymodel.tokens.8.19.2.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.io.recyclablememorystream/3.0.1/microsoft.io.recyclablememorystream.3.0.1.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.net.stringtools/17.11.48/microsoft.net.stringtools.17.11.48.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/microsoft.visualstudio.solutionpersistence/1.0.52/microsoft.visualstudio.solutionpersistence.1.0.52.nupkg.sha512",
@@ -115,6 +123,7 @@
     "/home/cohorte5/.nuget/packages/system.composition.typedparts/9.0.0/system.composition.typedparts.9.0.0.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/system.configuration.configurationmanager/9.0.0/system.configuration.configurationmanager.9.0.0.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/system.data.datasetextensions/4.5.0/system.data.datasetextensions.4.5.0.nupkg.sha512",
+    "/home/cohorte5/.nuget/packages/system.identitymodel.tokens.jwt/8.19.2/system.identitymodel.tokens.jwt.8.19.2.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/system.reflection.metadataloadcontext/8.0.0/system.reflection.metadataloadcontext.8.0.0.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/system.security.cryptography.pkcs/10.0.10/system.security.cryptography.pkcs.10.0.10.nupkg.sha512",
     "/home/cohorte5/.nuget/packages/system.security.cryptography.protecteddata/9.0.6/system.security.cryptography.protecteddata.9.0.6.nupkg.sha512"
@@ -123,7 +132,7 @@
     {
       "code": "NU1901",
       "level": "Warning",
-      "message": "El paquete \"NuGet.Packaging\" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
+      "message": "Package 'NuGet.Packaging' 6.12.1 has a known low severity vulnerability, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
       "projectPath": "/home/cohorte5/Escritorio/Firmeza/Firmeza.Web/Firmeza.Web.csproj",
       "warningLevel": 1,
       "filePath": "/home/cohorte5/Escritorio/Firmeza/Firmeza.Web/Firmeza.Web.csproj",
@@ -135,7 +144,7 @@
     {
       "code": "NU1901",
       "level": "Warning",
-      "message": "El paquete \"NuGet.Protocol\" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
+      "message": "Package 'NuGet.Protocol' 6.12.1 has a known low severity vulnerability, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
       "projectPath": "/home/cohorte5/Escritorio/Firmeza/Firmeza.Web/Firmeza.Web.csproj",
       "warningLevel": 1,
       "filePath": "/home/cohorte5/Escritorio/Firmeza/Firmeza.Web/Firmeza.Web.csproj",
