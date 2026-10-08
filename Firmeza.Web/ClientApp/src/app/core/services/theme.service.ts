@@ -4,7 +4,7 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root'
 })
 export class ThemeService {
-  public isDarkMode = signal<boolean>(false);
+  public isDarkMode = signal<boolean>(true); // Modo oscuro principal por defecto
   private readonly THEME_KEY = 'firmeza-theme';
 
   constructor() {
@@ -13,12 +13,12 @@ export class ThemeService {
 
   private initTheme(): void {
     const storedTheme = localStorage.getItem(this.THEME_KEY);
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
-      this.setDarkMode(true);
-    } else {
+    // Si el usuario guardó 'light', aplicamos modo claro; en cualquier otro caso modo oscuro (principal)
+    if (storedTheme === 'light') {
       this.setDarkMode(false);
+    } else {
+      this.setDarkMode(true);
     }
   }
 
@@ -26,10 +26,10 @@ export class ThemeService {
     this.setDarkMode(!this.isDarkMode());
   }
 
-  private setDarkMode(isDark: boolean): void {
+  public setDarkMode(isDark: boolean): void {
     this.isDarkMode.set(isDark);
     localStorage.setItem(this.THEME_KEY, isDark ? 'dark' : 'light');
-    
+
     if (isDark) {
       document.body.classList.add('theme-dark');
       document.body.classList.remove('theme-light');

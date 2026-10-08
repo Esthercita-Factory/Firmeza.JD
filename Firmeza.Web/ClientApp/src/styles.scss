@@ -1,96 +1,567 @@
-/* styles.scss */
+/* ==========================================================================
+   FIRMEZA · SISTEMA DE DISEÑO UI/UX HUD & DASHBOARD
+   Tokens CSS, Temas (Oscuro Principal & Claro), Tipografía y Utilidades HUD
+   ========================================================================== */
+
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 
+/* --------------------------------------------------------------------------
+   1. VARIABLES & DESIGN TOKENS
+   -------------------------------------------------------------------------- */
 :root {
-  /* Common tokens */
-  --font-heading: 'Rajdhani', 'Jura', sans-serif;
-  --font-body: 'Inter', 'Roboto', sans-serif;
-  
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-danger: #EF4444;
+  /* Tipografías del Brief */
+  --font-logo: 'Orbitron', monospace, sans-serif;
+  --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-numbers: 'Space Grotesk', monospace, sans-serif;
 
-  /* Default to Light Mode (Berry Angular Style) */
-  --bg-base: #EEF2F6;
-  --bg-panel: #FFFFFF;
-  --text-main: #121926;
-  --text-muted: #697586;
-  --border-color: #E3E8EF;
-  --accent-primary: #1E88E5;
-  --accent-glow: transparent;
-  
-  --panel-shadow: 0 2px 14px rgba(0, 0, 0, 0.05);
-  --panel-radius: 12px;
-  --panel-border: 1px solid var(--border-color);
+  /* Estados universales (con contraste y requerimiento de icono/texto) */
+  --color-success: #22C55E;
+  --color-success-bg: rgba(34, 197, 94, 0.12);
+  --color-warning: #F59E0B;
+  --color-warning-bg: rgba(245, 158, 11, 0.12);
+  --color-danger: #EF4444;
+  --color-danger-bg: rgba(239, 68, 68, 0.12);
+
+  /* Transición estándar */
+  --transition-fast: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  --radius-card: 12px;
+  --radius-sm: 6px;
+  --radius-pill: 9999px;
 }
 
-body.theme-dark {
-  /* Dark Mode (SCIFI Style) */
-  --bg-base: #0B0F19;
-  --bg-panel: #111827;
-  --text-main: #F9FAFB;
-  --text-muted: #9CA3AF;
-  --border-color: #1F2937;
-  --accent-primary: #06b6d4;
-  --accent-glow: 0 0 10px rgba(6, 182, 212, 0.3);
-  
-  --panel-shadow: none;
-  --panel-radius: 4px;
-  --panel-border: 1px solid var(--border-color);
+/* --- MODO OSCURO (PRINCIPAL / POR DEFECTO) --- */
+body.theme-dark, :root {
+  --bg-base: #0B1020;             /* Azul-negro profundo */
+  --bg-panel: #121A30;            /* Superficie de paneles */
+  --bg-panel-hover: #172240;      /* Elevación hover */
+  --bg-panel-active: #1D2A4F;
+  --bg-input: #0E1528;            /* Fondos de inputs/selects */
+  --bg-glass: rgba(18, 26, 48, 0.85);
+
+  --border-color: #25314F;        /* Borde fino de 1px */
+  --border-glow: rgba(34, 211, 238, 0.35);
+  --border-highlight: #3A4B75;
+
+  --text-main: #E8ECF8;           /* Texto principal */
+  --text-secondary: #8D98B8;      /* Texto secundario */
+  --text-muted: #626E8F;
+
+  --accent-primary: #22D3EE;      /* Cian eléctrico */
+  --accent-primary-hover: #06B6D4;
+  --accent-primary-glow: 0 0 16px rgba(34, 211, 238, 0.35);
+  --accent-primary-soft: rgba(34, 211, 238, 0.12);
+
+  --accent-secondary: #8B5CF6;    /* Violeta */
+  --accent-secondary-hover: #7C3AED;
+  --accent-secondary-glow: 0 0 16px rgba(139, 92, 246, 0.35);
+  --accent-secondary-soft: rgba(139, 92, 246, 0.12);
+
+  --hud-line: rgba(34, 211, 238, 0.2);
+  --panel-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* --- MODO CLARO --- */
+body.theme-light {
+  --bg-base: #F4F6FB;             /* Fondo claro suave */
+  --bg-panel: #FFFFFF;            /* Tarjetas blancas */
+  --bg-panel-hover: #F8FAFD;
+  --bg-panel-active: #EDF2F9;
+  --bg-input: #FFFFFF;
+  --bg-glass: rgba(255, 255, 255, 0.9);
+
+  --border-color: #E3E8F2;        /* Borde sutil */
+  --border-glow: rgba(8, 145, 178, 0.25);
+  --border-highlight: #CBD5E1;
+
+  --text-main: #0F172A;           /* Texto oscuro de alta legibilidad */
+  --text-secondary: #64748B;      /* Texto secundario claro */
+  --text-muted: #94A3B8;
+
+  --accent-primary: #0891B2;      /* Cian más profundo para contraste AA */
+  --accent-primary-hover: #0E7490;
+  --accent-primary-glow: 0 0 12px rgba(8, 145, 178, 0.2);
+  --accent-primary-soft: rgba(8, 145, 178, 0.1);
+
+  --accent-secondary: #7C3AED;    /* Violeta profundo */
+  --accent-secondary-hover: #6D28D9;
+  --accent-secondary-glow: 0 0 12px rgba(124, 58, 237, 0.2);
+  --accent-secondary-soft: rgba(124, 58, 237, 0.1);
+
+  --hud-line: rgba(8, 145, 178, 0.2);
+  --panel-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   2. REGLAS BASE & TIPOGRAFÍA
+   -------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
 }
 
 body {
   background-color: var(--bg-base);
   color: var(--text-main);
   font-family: var(--font-body);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-smooth), color var(--transition-smooth);
+  overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6, .hud-text {
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--text-main);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Jerarquía de encabezados del brief */
+.h1-title, h1 { font-size: 26px; }
+.h2-title, h2 { font-size: 20px; }
+.h3-title, h3 { font-size: 17px; }
+.text-body { font-size: 14px; }
+.text-tag { font-size: 12px; }
+
+/* Tabular Numbers: regla de oro para precios, cantidades y totales */
+.tabular-nums, .price-tag, .metric-number {
+  font-family: var(--font-numbers);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Logo con Orbitron */
+.firmeza-logo-brand {
+  font-family: var(--font-logo);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Enlaces */
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover {
+  color: var(--accent-primary-hover);
+}
+
+/* --------------------------------------------------------------------------
+   3. PANELES HUD, PROFUNDIDAD & DETALLES
+   -------------------------------------------------------------------------- */
+.hud-panel {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-card);
+  box-shadow: var(--panel-shadow);
+  position: relative;
+  transition: border-color var(--transition-fast), 
+              box-shadow var(--transition-fast), 
+              transform var(--transition-fast),
+              background-color var(--transition-smooth);
+}
+
+/* Hover en tarjetas según brief: borde se ilumina y eleva 2px */
+.hud-panel-hoverable:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), var(--accent-primary-glow);
+  transform: translateY(-2px);
+}
+
+/* Esquinas técnicas HUD discretas (Bracket corners) */
+.hud-bracket {
+  position: relative;
+}
+.hud-bracket::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid var(--accent-primary);
+  border-left: 2px solid var(--accent-primary);
+  pointer-events: none;
+  opacity: 0.7;
+}
+.hud-bracket::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid var(--accent-primary);
+  border-right: 2px solid var(--accent-primary);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Línea separadora HUD fina */
+.hud-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color) 20%, var(--border-color) 80%, transparent);
+  margin: 1rem 0;
+  border: none;
+}
+
+/* Luz de acento sutil en encabezado de panel */
+.hud-panel-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.03) 0%, transparent 100%);
+  border-top-left-radius: var(--radius-card);
+  border-top-right-radius: var(--radius-card);
+}
+
+/* --------------------------------------------------------------------------
+   4. BOTONES Y CONTROLES
+   -------------------------------------------------------------------------- */
+.btn-hud-primary {
+  background-color: var(--accent-primary);
+  color: #0B1020;
   font-family: var(--font-heading);
   font-weight: 600;
+  font-size: 14px;
+  border: 1px solid var(--accent-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 40px; /* Tamaño táctil mínimo */
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.25);
+}
+.btn-hud-primary:hover:not(:disabled) {
+  background-color: var(--accent-primary-hover);
+  border-color: var(--accent-primary-hover);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.45);
+  transform: translateY(-1px);
+  color: #0B1020;
+}
+.btn-hud-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
-.card, .panel {
-  background-color: var(--bg-panel);
-  border: var(--panel-border);
-  border-radius: var(--panel-radius);
-  box-shadow: var(--panel-shadow);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.card-header {
+.btn-hud-secondary {
   background-color: transparent;
-  border-bottom: var(--panel-border);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+.btn-hud-secondary:hover {
+  background-color: var(--bg-panel-hover);
+  border-color: var(--text-secondary);
+  color: var(--text-main);
 }
 
-.btn-primary {
-  background-color: var(--accent-primary);
+.btn-hud-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+.btn-hud-icon:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: var(--accent-primary-glow);
+}
+
+/* --------------------------------------------------------------------------
+   5. INPUTS & FORMULARIOS
+   -------------------------------------------------------------------------- */
+.form-control, .form-select {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  padding: 0.6rem 0.85rem;
+  font-size: 14px;
+  min-height: 40px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-smooth);
+}
+.form-control:focus, .form-select:focus {
+  background-color: var(--bg-input);
+  color: var(--text-main);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-primary-soft), var(--accent-primary-glow);
+  outline: none;
+}
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+/* Input Search con icono */
+.hud-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.hud-search-box i {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.hud-search-box input {
+  padding-left: 36px;
+}
+.hud-search-box .search-shortcut {
+  position: absolute;
+  right: 10px;
+  background-color: var(--bg-panel-active);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 2px 6px;
+  font-size: 11px;
+  border-radius: 4px;
+  font-family: var(--font-heading);
+}
+
+/* --------------------------------------------------------------------------
+   6. BADGES Y ESTADOS
+   -------------------------------------------------------------------------- */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 500;
+}
+.badge-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Stock sano / Éxito */
+.status-success {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+.status-success .badge-status-dot {
+  background-color: var(--color-success);
+  box-shadow: 0 0 6px var(--color-success);
+}
+
+/* Stock medio / Advertencia */
+.status-warning {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.status-warning .badge-status-dot {
+  background-color: var(--color-warning);
+  box-shadow: 0 0 6px var(--color-warning);
+}
+
+/* Stock bajo / Crítico */
+.status-danger {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.status-danger .badge-status-dot {
+  background-color: var(--color-danger);
+  box-shadow: 0 0 6px var(--color-danger);
+}
+
+/* Chip de categoría */
+.hud-chip {
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+  white-space: nowrap;
+}
+.hud-chip:hover {
+  color: var(--text-main);
   border-color: var(--accent-primary);
 }
-
-.btn-primary:hover {
-  background-color: color-mix(in srgb, var(--accent-primary) 80%, black);
-  border-color: color-mix(in srgb, var(--accent-primary) 80%, black);
-}
-
-.hud-active {
-  box-shadow: var(--accent-glow);
+.hud-chip.active {
+  background-color: var(--accent-primary-soft);
+  color: var(--accent-primary);
   border-color: var(--accent-primary);
+  box-shadow: var(--accent-primary-glow);
 }
 
-/* Custom scrollbar for SCIFI feel in dark mode */
-body.theme-dark ::-webkit-scrollbar {
+/* --------------------------------------------------------------------------
+   7. TABLAS HUD MODERNAS
+   -------------------------------------------------------------------------- */
+.hud-table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border-color);
+}
+.hud-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--text-main);
+}
+.hud-table thead th {
+  background-color: var(--bg-panel-hover);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  border-top: none;
+  white-space: nowrap;
+}
+.hud-table tbody tr {
+  background-color: var(--bg-panel);
+  transition: background-color var(--transition-fast);
+}
+.hud-table tbody tr:hover {
+  background-color: var(--bg-panel-hover);
+}
+.hud-table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+  font-size: 14px;
+}
+.hud-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. ANIMACIONES Y MICROINTERACCIONES
+   -------------------------------------------------------------------------- */
+/* Pulso de carrito */
+@keyframes cartPulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.3); filter: drop-shadow(0 0 8px var(--accent-primary)); }
+  100% { transform: scale(1); }
+}
+.animate-cart-pulse {
+  animation: cartPulse 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Entrada de Toast desde un costado */
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.toast-slide-in {
+  animation: toastSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Shimmer Loader de Skeleton */
+@keyframes hudShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg, 
+    var(--bg-panel) 0%, 
+    var(--border-color) 45%, 
+    var(--bg-panel-hover) 65%, 
+    var(--bg-panel) 100%
+  );
+  background-size: 200% 100%;
+  animation: hudShimmer 1.8s infinite;
+  border-radius: 6px;
+}
+
+/* Indicador de sistema en vivo (punto verde pulsante) */
+@keyframes liveDotPulse {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+.live-indicator-dot {
   width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-success);
+  display: inline-block;
+  animation: liveDotPulse 2s infinite;
 }
-body.theme-dark ::-webkit-scrollbar-track {
+
+/* --------------------------------------------------------------------------
+   9. ACCESIBILIDAD Y REDUCE MOTION
+   -------------------------------------------------------------------------- */
+/* Anillo de foco visible en todo elemento interactivo */
+:focus-visible {
+  outline: 2px solid var(--accent-primary) !important;
+  outline-offset: 2px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Scrollbar futurista */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
   background: var(--bg-base);
 }
-body.theme-dark ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: var(--border-color);
   border-radius: 4px;
 }
-body.theme-dark ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
 }

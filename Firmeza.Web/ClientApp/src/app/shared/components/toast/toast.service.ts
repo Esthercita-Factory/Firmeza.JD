@@ -23,6 +23,22 @@ export class ToastService {
     setTimeout(() => this.remove(id), 5000);
   }
 
+  showSuccess(message: string) {
+    this.show(message, 'success');
+  }
+
+  showError(message: string) {
+    this.show(message, 'danger');
+  }
+
+  showWarning(message: string) {
+    this.show(message, 'warning');
+  }
+
+  showInfo(message: string) {
+    this.show(message, 'info');
+  }
+
   remove(id: number) {
     this.toasts.update(t => t.filter(toast => toast.id !== id));
   }

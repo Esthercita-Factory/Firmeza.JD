@@ -1,4 +1,5 @@
 using System.Text;
+using Firmeza.Domain.Entities;
 using Firmeza.Application.Services.Auth;
 using Firmeza.Application.Services.Customers;
 using Firmeza.Application.Services.Dashboard;
@@ -65,6 +66,10 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<Firmeza.Application.Services.Receipts.IReceiptService, Firmeza.Application.Services.Receipts.ReceiptService>();
+builder.Services.AddScoped<Firmeza.Application.Services.Email.IEmailService, Firmeza.Infraestructure.Services.SmtpEmailService>();
+builder.Services.AddScoped<Firmeza.Application.Services.Import.IExcelImportService, Firmeza.Infraestructure.Services.ExcelImportService>();
+builder.Services.AddScoped<Firmeza.Application.Services.Export.IExportService, Firmeza.Infraestructure.Services.ExportService>();
 
 builder.Services.AddControllers();
 
@@ -114,13 +119,44 @@ using (var scope = app.Services.CreateScope())
             var token = await userManager.GeneratePasswordResetTokenAsync(adminUser);
             await userManager.ResetPasswordAsync(adminUser, token, "Admin123!");
         }
+
+        var clientEmail = "cliente@firmeza.com";
+        var clientUser = await userManager.FindByEmailAsync(clientEmail);
+
+        if (clientUser == null)
         {
-            var newAdmin = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
-            var result = await userManager.CreateAsync(newAdmin, "Admin123!");
+            var newClient = new IdentityUser { UserName = clientEmail, Email = clientEmail, EmailConfirmed = true };
+            var result = await userManager.CreateAsync(newClient, "Cliente123!");
             if (result.Succeeded)
             {
-                await userManager.AddToRoleAsync(newAdmin, "Administrador");
+                await userManager.AddToRoleAsync(newClient, "Cliente");
             }
+        }
+        else
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(clientUser);
+            await userManager.ResetPasswordAsync(clientUser, token, "Cliente123!");
+        }
+        if (!context.Products.Any())
+        {
+            context.Products.AddRange(
+                new Product { Name = "Cemento Gris Argos Tipo 1 (50kg)", Price = 34500, Stock = 450, MinStock = 50, Unit = "Bolsa", Sku = "CEM-ARG-50" },
+                new Product { Name = "Varilla Corrugada 1/2\" x 6m W60", Price = 29800, Stock = 800, MinStock = 100, Unit = "Unidad", Sku = "VAR-COR-12" },
+                new Product { Name = "Ladrillo Farol Limpio 10x20x30", Price = 1850, Stock = 4500, MinStock = 500, Unit = "Millar", Sku = "LAD-FAR-10" },
+                new Product { Name = "Arena de Río Lavada (M3)", Price = 72000, Stock = 35, MinStock = 10, Unit = "M3", Sku = "ARE-RIO-M3" },
+                new Product { Name = "Grava Triturada 1/2\" (M3)", Price = 85000, Stock = 28, MinStock = 10, Unit = "M3", Sku = "GRA-TRI-M3" }
+            );
+            await context.SaveChangesAsync();
+        }
+
+        if (!context.Customers.Any())
+        {
+            context.Customers.AddRange(
+                new Customer { Name = "Constructora Los Andes S.A.S", Document = "900123456", Email = "compras@losandes.com", Phone = "3001234567", Age = 35 },
+                new Customer { Name = "Inversiones Bogotá y Cía.", Document = "900987654", Email = "proyectos@invbogota.com", Phone = "3109876543", Age = 40 },
+                new Customer { Name = "Maestro Juan Carlos Pérez", Document = "79876543", Email = "juan.perez@gmail.com", Phone = "3154567890", Age = 48 }
+            );
+            await context.SaveChangesAsync();
         }
     }
     catch (Exception ex)

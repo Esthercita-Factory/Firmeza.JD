@@ -1,0 +1,10 @@
+{
+  "name": "firmeza-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix Firmeza.Web/ClientApp start",
+    "build": "npm --prefix Firmeza.Web/ClientApp run build",
+    "install:client": "npm --prefix Firmeza.Web/ClientApp install"
+  }
+}

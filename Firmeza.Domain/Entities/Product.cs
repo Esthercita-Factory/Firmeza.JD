@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Firmeza.Domain.Entities
 {
@@ -19,5 +20,14 @@ namespace Firmeza.Domain.Entities
         
         [Required]
         public int Stock { get; set; }
+
+        [NotMapped]
+        public int MinStock { get; set; } = 10;
+
+        [NotMapped]
+        public string Unit { get; set; } = "Unidad";
+
+        [NotMapped]
+        public string Sku { get; set; } = string.Empty;
     }
 }

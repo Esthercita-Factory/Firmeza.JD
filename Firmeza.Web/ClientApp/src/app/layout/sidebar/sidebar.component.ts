@@ -1,77 +1,353 @@
-import { Component } from '@angular/core';
+import { Component, signal, Output, EventEmitter, Input, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterModule],
+  imports: [CommonModule, RouterModule],
   template: `
-    <div class="sidebar panel h-100 p-3 d-flex flex-column">
-      <div class="brand mb-4 px-2">
-        <h2 class="hud-text text-primary m-0 d-flex align-items-center">
-          <i class="bi bi-hexagon-fill me-2"></i> FIRMEZA
-        </h2>
+    <aside class="hud-sidebar d-flex flex-column h-100" 
+           [class.collapsed]="isCollapsed"
+           [class.mobile-open]="isMobileOpen">
+      
+      <!-- Brand / Logo -->
+      <div class="sidebar-header d-flex align-items-center justify-content-between px-3 py-3 border-bottom">
+        <a [routerLink]="authService.isClient() ? '/tienda' : '/dashboard'" class="d-flex align-items-center gap-2 text-decoration-none">
+          <div class="logo-symbol d-flex align-items-center justify-content-center">
+            <i class="bi bi-layers-half text-cyan"></i>
+          </div>
+          <div class="brand-text" *ngIf="!isCollapsed">
+            <span class="firmeza-logo-brand text-main">FIRMEZA</span>
+            <span class="hud-tag">{{ authService.isClient() ? 'PORTAL CLIENTE' : 'POS · HUD' }}</span>
+          </div>
+        </a>
+
+        <!-- Collapse toggle button (desktop) -->
+        <button class="btn-toggle-sidebar d-none d-lg-flex" 
+                (click)="toggleCollapse()" 
+                [title]="isCollapsed ? 'Expandir menú' : 'Colapsar menú'">
+          <i class="bi" [class.bi-chevron-left]="!isCollapsed" [class.bi-chevron-right]="isCollapsed"></i>
+        </button>
+
+        <!-- Close button (mobile) -->
+        <button class="btn-toggle-sidebar d-lg-none" (click)="closeMobile()">
+          <i class="bi bi-x-lg"></i>
+        </button>
       </div>
 
-      <nav class="nav flex-column gap-2">
-        <a class="nav-link rounded" routerLink="/dashboard" routerLinkActive="active">
-          <i class="bi bi-grid-1x2-fill me-2"></i> Dashboard
+      <!-- Navigation links -->
+      <nav class="sidebar-nav flex-grow-1 py-3 px-2 d-flex flex-column gap-1">
+        
+        <!-- SECCIÓN OPERACIONES (ADMIN) -->
+        <ng-container *ngIf="authService.isAdmin()">
+          <div class="nav-section-title px-2 py-1 text-uppercase" *ngIf="!isCollapsed">
+            Operaciones
+          </div>
+
+          <!-- POS - Nueva Venta (Destacado para Admin) -->
+          <a class="sidebar-link pos-highlight" 
+             routerLink="/pos" 
+             routerLinkActive="active"
+             [title]="isCollapsed ? 'Nueva Venta (POS)' : ''">
+            <div class="link-icon">
+              <i class="bi bi-cart-plus-fill"></i>
+            </div>
+            <span class="link-text" *ngIf="!isCollapsed">Nueva Venta</span>
+            <span class="badge-star ms-auto" *ngIf="!isCollapsed">POS</span>
+          </a>
+
+          <!-- Dashboard de Control (Gráficos y Métricas) -->
+          <a class="sidebar-link" 
+             routerLink="/dashboard" 
+             routerLinkActive="active"
+             [title]="isCollapsed ? 'Dashboard de Control' : ''">
+            <div class="link-icon">
+              <i class="bi bi-grid-1x2-fill"></i>
+            </div>
+            <span class="link-text" *ngIf="!isCollapsed">Dashboard</span>
+          </a>
+        </ng-container>
+
+        <!-- SECCIÓN GESTIÓN (ADMIN) -->
+        <ng-container *ngIf="authService.isAdmin()">
+          <div class="nav-section-title px-2 pt-3 pb-1 text-uppercase" *ngIf="!isCollapsed">
+            Gestión ERP
+          </div>
+
+          <!-- Productos -->
+          <a class="sidebar-link" 
+             routerLink="/products" 
+             routerLinkActive="active"
+             [title]="isCollapsed ? 'Productos e Inventario' : ''">
+            <div class="link-icon">
+              <i class="bi bi-box-seam-fill"></i>
+            </div>
+            <span class="link-text" *ngIf="!isCollapsed">Productos</span>
+          </a>
+
+          <!-- Clientes -->
+          <a class="sidebar-link" 
+             routerLink="/customers" 
+             routerLinkActive="active"
+             [title]="isCollapsed ? 'Clientes' : ''">
+            <div class="link-icon">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <span class="link-text" *ngIf="!isCollapsed">Clientes</span>
+          </a>
+
+          <!-- Ventas -->
+          <a class="sidebar-link" 
+             routerLink="/sales" 
+             routerLinkActive="active"
+             [title]="isCollapsed ? 'Historial de Ventas' : ''">
+            <div class="link-icon">
+              <i class="bi bi-receipt"></i>
+            </div>
+            <span class="link-text" *ngIf="!isCollapsed">Ventas</span>
+          </a>
+        </ng-container>
+
+        <!-- SECCIÓN TIENDA Y PEDIDOS -->
+        <div class="nav-section-title px-2 pt-3 pb-1 text-uppercase" *ngIf="!isCollapsed">
+          Tienda & Pedidos
+        </div>
+
+        <!-- Catálogo Tienda -->
+        <a class="sidebar-link" 
+           routerLink="/tienda" 
+           routerLinkActive="active"
+           [title]="isCollapsed ? 'Catálogo de Productos' : ''">
+          <div class="link-icon">
+            <i class="bi bi-shop"></i>
+          </div>
+          <span class="link-text" *ngIf="!isCollapsed">Catálogo Tienda</span>
         </a>
-        <a class="nav-link rounded" routerLink="/pos" routerLinkActive="active">
-          <i class="bi bi-cart-fill me-2"></i> Nueva Venta
+
+        <!-- Mi Carrito -->
+        <a class="sidebar-link" 
+           routerLink="/carrito" 
+           routerLinkActive="active"
+           [title]="isCollapsed ? 'Carrito de Compras' : ''">
+          <div class="link-icon">
+            <i class="bi bi-cart3"></i>
+          </div>
+          <span class="link-text" *ngIf="!isCollapsed">Mi Carrito</span>
         </a>
-        <div class="mt-3 mb-1 px-2 text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 1px;">Gestión</div>
-        <a class="nav-link rounded" routerLink="/products" routerLinkActive="active">
-          <i class="bi bi-box-seam-fill me-2"></i> Productos
+
+        <!-- Mis Pedidos -->
+        <a class="sidebar-link" 
+           routerLink="/mis-compras" 
+           routerLinkActive="active"
+           [title]="isCollapsed ? 'Mis Pedidos & Comprobantes' : ''">
+          <div class="link-icon">
+            <i class="bi bi-bag-check"></i>
+          </div>
+          <span class="link-text" *ngIf="!isCollapsed">Mis Pedidos</span>
         </a>
-        <a class="nav-link rounded" routerLink="/customers" routerLinkActive="active">
-          <i class="bi bi-people-fill me-2"></i> Clientes
-        </a>
-        <a class="nav-link rounded" routerLink="/sales" routerLinkActive="active">
-          <i class="bi bi-receipt me-2"></i> Ventas
-        </a>
+
       </nav>
-      
-      <div class="mt-auto">
-        <div class="card bg-transparent border-0 shadow-none p-2 text-center hud-text">
-          <small class="text-muted">v2.0 (Angular)</small>
+
+      <!-- System status bottom bar -->
+      <div class="sidebar-footer p-3 border-top">
+        <div class="system-status d-flex align-items-center gap-2" *ngIf="!isCollapsed">
+          <span class="live-indicator-dot"></span>
+          <div class="d-flex flex-column">
+            <span class="status-title">CABINA EN VIVO</span>
+            <span class="status-sub">Sincronizado</span>
+          </div>
+        </div>
+        <div class="text-center" *ngIf="isCollapsed" title="Sistema en línea y sincronizado">
+          <span class="live-indicator-dot"></span>
         </div>
       </div>
-    </div>
+
+    </aside>
+
+    <!-- Backdrop for mobile drawer -->
+    <div class="mobile-backdrop d-lg-none" *ngIf="isMobileOpen" (click)="closeMobile()"></div>
   `,
   styles: [`
-    .sidebar {
-      width: 260px;
-      border-right: var(--panel-border);
-      border-top: none;
-      border-bottom: none;
-      border-left: none;
-      border-radius: 0;
+    .hud-sidebar {
+      width: 250px;
+      background-color: var(--bg-panel);
+      border-right: 1px solid var(--border-color);
+      transition: width var(--transition-smooth), transform var(--transition-smooth);
+      position: relative;
+      z-index: 1040;
     }
-    
-    .nav-link {
-      color: var(--text-muted);
-      font-weight: 500;
-      transition: all 0.2s ease;
-      padding: 0.75rem 1rem;
+
+    .hud-sidebar.collapsed {
+      width: 76px;
     }
-    
-    .nav-link:hover {
-      color: var(--text-main);
-      background-color: color-mix(in srgb, var(--bg-base) 80%, var(--bg-panel));
+
+    .logo-symbol {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+      border: 1px solid var(--accent-primary);
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.25);
     }
-    
-    .nav-link.active {
+
+    .text-cyan {
       color: var(--accent-primary);
-      background-color: color-mix(in srgb, var(--accent-primary) 10%, transparent);
-      border-left: 3px solid var(--accent-primary);
-      border-radius: 0 6px 6px 0 !important;
+      font-size: 1.15rem;
     }
-    
-    body.theme-dark .nav-link.active {
-      box-shadow: inset 2px 0 10px rgba(6, 182, 212, 0.1);
+
+    .firmeza-logo-brand {
+      font-size: 1.05rem;
+      display: block;
+      line-height: 1.1;
+      letter-spacing: 0.1em;
+    }
+
+    .hud-tag {
+      font-size: 10px;
+      color: var(--accent-primary);
+      font-family: var(--font-heading);
+      letter-spacing: 0.12em;
+    }
+
+    .btn-toggle-sidebar {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-toggle-sidebar:hover {
+      color: var(--accent-primary);
       border-color: var(--accent-primary);
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+
+    .sidebar-link:hover {
+      color: var(--text-main);
+      background-color: var(--bg-panel-hover);
+    }
+
+    .sidebar-link.active {
+      color: var(--accent-primary);
+      background-color: var(--accent-primary-soft);
+      border: 1px solid var(--accent-primary);
+      box-shadow: var(--accent-primary-glow);
+    }
+
+    .sidebar-link.pos-highlight {
+      border: 1px dashed rgba(34, 211, 238, 0.4);
+    }
+    .sidebar-link.pos-highlight:hover {
+      border-color: var(--accent-primary);
+    }
+
+    .link-icon {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      flex-shrink: 0;
+    }
+
+    .link-text {
+      white-space: nowrap;
+      font-size: 13.5px;
+    }
+
+    .badge-star {
+      background: var(--accent-primary);
+      color: #0B1020;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: var(--font-heading);
+    }
+
+    .sidebar-footer {
+      background: var(--bg-base);
+    }
+
+    .status-title {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-success);
+      letter-spacing: 0.05em;
+    }
+    .status-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* Mobile drawer */
+    @media (max-width: 991.98px) {
+      .hud-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        width: 260px !important;
+      }
+      .hud-sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .mobile-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(4px);
+        z-index: 1030;
+      }
     }
   `]
 })
-export class SidebarComponent {}
+export class SidebarComponent {
+  public authService = inject(AuthService);
+  @Input() isCollapsed = false;
+  @Input() isMobileOpen = false;
+  @Output() collapseChange = new EventEmitter<boolean>();
+  @Output() closeMobileEvent = new EventEmitter<void>();
+
+  toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+    this.collapseChange.emit(this.isCollapsed);
+  }
+
+  closeMobile() {
+    this.isMobileOpen = false;
+    this.closeMobileEvent.emit();
+  }
+}

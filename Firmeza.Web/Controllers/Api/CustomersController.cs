@@ -3,11 +3,13 @@ using Firmeza.Application.Services.Customers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using Firmeza.Domain.Identity;
+
 namespace Firmeza.Web.Controllers.Api;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[Authorize(Roles = ApplicationRoles.Administrator)]
 public class CustomersController : ControllerBase
 {
     private readonly ICustomerService _service;

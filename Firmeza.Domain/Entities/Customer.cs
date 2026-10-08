@@ -22,5 +22,11 @@ namespace Firmeza.Domain.Entities
         
         [Range(18, 120, ErrorMessage = "La edad debe estar entre 18 y 120")]
         public int Age { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public string? Address { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public System.DateTime CreatedAt { get; set; } = System.DateTime.UtcNow;
     }
 }
