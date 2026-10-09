@@ -1,3 +1,4 @@
+using AutoMapper;
 using Firmeza.Application.Dtos.Customers;
 using Firmeza.Application.Services.Customers;
 using Firmeza.Domain.Entities;
@@ -9,7 +10,13 @@ namespace Firmeza.Infraestructure.Services;
 public class CustomerService : ICustomerService
 {
     private readonly ApplicationDbContext _context;
-    public CustomerService(ApplicationDbContext context) => _context = context;
+    private readonly IMapper _mapper;
+    
+    public CustomerService(ApplicationDbContext context, IMapper mapper)
+    {
+        _context = context;
+        _mapper = mapper;
+    }
 
     public async Task<IEnumerable<CustomerDto>> GetAllAsync(string? search)
     {
@@ -17,33 +24,30 @@ public class CustomerService : ICustomerService
         if (!string.IsNullOrEmpty(search))
             query = query.Where(c => c.Name.Contains(search) || c.Document.Contains(search));
 
-        return await query.Select(c => new CustomerDto
-        {
-            Id = c.Id, Name = c.Name, Document = c.Document,
-            Email = c.Email, Phone = c.Phone, Age = c.Age
-        }).ToListAsync();
+        var customers = await query.ToListAsync();
+        return _mapper.Map<IEnumerable<CustomerDto>>(customers);
     }
 
     public async Task<CustomerDto?> GetByIdAsync(int id)
     {
         var c = await _context.Customers.FindAsync(id);
         if (c == null) return null;
-        return new CustomerDto { Id = c.Id, Name = c.Name, Document = c.Document, Email = c.Email, Phone = c.Phone, Age = c.Age };
+        return _mapper.Map<CustomerDto>(c);
     }
 
     public async Task<CustomerDto> CreateAsync(CustomerCreateDto dto)
     {
-        var c = new Customer { Name = dto.Name, Document = dto.Document, Email = dto.Email, Phone = dto.Phone, Age = dto.Age };
+        var c = _mapper.Map<Customer>(dto);
         _context.Customers.Add(c);
         await _context.SaveChangesAsync();
-        return new CustomerDto { Id = c.Id, Name = c.Name, Document = c.Document, Email = c.Email, Phone = c.Phone, Age = c.Age };
+        return _mapper.Map<CustomerDto>(c);
     }
 
     public async Task<bool> UpdateAsync(int id, CustomerCreateDto dto)
     {
         var c = await _context.Customers.FindAsync(id);
         if (c == null) return false;
-        c.Name = dto.Name; c.Document = dto.Document; c.Email = dto.Email; c.Phone = dto.Phone; c.Age = dto.Age;
+        _mapper.Map(dto, c);
         await _context.SaveChangesAsync();
         return true;
     }

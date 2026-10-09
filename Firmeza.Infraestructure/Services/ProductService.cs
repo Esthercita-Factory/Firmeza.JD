@@ -1,3 +1,4 @@
+using AutoMapper;
 using Firmeza.Application.Dtos.Products;
 using Firmeza.Application.Services.Products;
 using Firmeza.Domain.Entities;
@@ -9,10 +10,12 @@ namespace Firmeza.Infraestructure.Services;
 public class ProductService : IProductService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public ProductService(ApplicationDbContext context)
+    public ProductService(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<ProductDto>> GetAllAsync(string? search)
@@ -23,14 +26,8 @@ public class ProductService : IProductService
             query = query.Where(p => p.Name.Contains(search));
         }
 
-        return await query.Select(p => new ProductDto
-        {
-            Id = p.Id,
-            Name = p.Name,
-            Description = p.Description,
-            Price = p.Price,
-            Stock = p.Stock
-        }).ToListAsync();
+        var products = await query.ToListAsync();
+        return _mapper.Map<IEnumerable<ProductDto>>(products);
     }
 
     public async Task<ProductDto?> GetByIdAsync(int id)
@@ -38,37 +35,16 @@ public class ProductService : IProductService
         var p = await _context.Products.FindAsync(id);
         if (p == null) return null;
 
-        return new ProductDto
-        {
-            Id = p.Id,
-            Name = p.Name,
-            Description = p.Description,
-            Price = p.Price,
-            Stock = p.Stock
-        };
+        return _mapper.Map<ProductDto>(p);
     }
 
     public async Task<ProductDto> CreateAsync(ProductCreateDto dto)
     {
-        var product = new Product
-        {
-            Name = dto.Name,
-            Description = dto.Description,
-            Price = dto.Price,
-            Stock = dto.Stock
-        };
-
+        var product = _mapper.Map<Product>(dto);
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
 
-        return new ProductDto
-        {
-            Id = product.Id,
-            Name = product.Name,
-            Description = product.Description,
-            Price = product.Price,
-            Stock = product.Stock
-        };
+        return _mapper.Map<ProductDto>(product);
     }
 
     public async Task<bool> UpdateAsync(int id, ProductCreateDto dto)
@@ -76,11 +52,7 @@ public class ProductService : IProductService
         var product = await _context.Products.FindAsync(id);
         if (product == null) return false;
 
-        product.Name = dto.Name;
-        product.Description = dto.Description;
-        product.Price = dto.Price;
-        product.Stock = dto.Stock;
-
+        _mapper.Map(dto, product);
         await _context.SaveChangesAsync();
         return true;
     }

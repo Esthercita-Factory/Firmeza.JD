@@ -23,7 +23,7 @@ public class ExportService : IExportService
 
     static ExportService()
     {
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        // EPPlus license now configured in appsettings.json
         QuestPDF.Settings.License = LicenseType.Community;
     }
 
@@ -46,9 +46,9 @@ public class ExportService : IExportService
             var cell = ws.Cells[1, i + 1];
             cell.Value = headers[i];
             cell.Style.Font.Bold = true;
-            cell.Style.Font.Color.SetColor(Color.White);
+            cell.Style.Font.Color.SetColor(System.Drawing.Color.White);
             cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-            cell.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(14, 116, 144));
+            cell.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(14, 116, 144));
             cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         }
 
@@ -67,7 +67,7 @@ public class ExportService : IExportService
             
             if (p.Stock <= p.MinStock)
             {
-                ws.Cells[row, 8].Style.Font.Color.SetColor(Color.DarkRed);
+                ws.Cells[row, 8].Style.Font.Color.SetColor(System.Drawing.Color.DarkRed);
                 ws.Cells[row, 8].Style.Font.Bold = true;
             }
 
@@ -192,9 +192,9 @@ public class ExportService : IExportService
             var cell = ws.Cells[1, i + 1];
             cell.Value = headers[i];
             cell.Style.Font.Bold = true;
-            cell.Style.Font.Color.SetColor(Color.White);
+            cell.Style.Font.Color.SetColor(System.Drawing.Color.White);
             cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-            cell.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(14, 116, 144));
+            cell.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(14, 116, 144));
             cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         }
 
@@ -232,9 +232,9 @@ public class ExportService : IExportService
             var cell = ws.Cells[1, i + 1];
             cell.Value = headers[i];
             cell.Style.Font.Bold = true;
-            cell.Style.Font.Color.SetColor(Color.White);
+            cell.Style.Font.Color.SetColor(System.Drawing.Color.White);
             cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-            cell.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(14, 116, 144));
+            cell.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(14, 116, 144));
             cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         }
 

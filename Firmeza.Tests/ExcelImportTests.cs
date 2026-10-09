@@ -7,11 +7,6 @@ namespace Firmeza.Tests;
 
 public class ExcelImportTests
 {
-    static ExcelImportTests()
-    {
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-    }
-
     [Fact]
     public void GenerateSampleTemplate_Should_Produce_Valid_Excel_With_Mixed_Data()
     {
@@ -40,7 +35,7 @@ public class ExcelImportTests
     }
 
     [Fact]
-    public async void ImportFromStreamAsync_With_Empty_Stream_Should_Fail_Gracefully()
+    public async System.Threading.Tasks.Task ImportFromStreamAsync_With_Empty_Stream_Should_Fail_Gracefully()
     {
         var service = new ExcelImportService(null!);
 

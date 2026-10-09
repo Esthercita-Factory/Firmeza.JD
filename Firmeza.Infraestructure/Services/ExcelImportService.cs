@@ -22,7 +22,7 @@ public class ExcelImportService : IExcelImportService
     public ExcelImportService(ApplicationDbContext context)
     {
         _context = context;
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        // EPPlus license now configured in appsettings.json
     }
 
     public async Task<ExcelImportResultDto> ImportFromStreamAsync(Stream stream)

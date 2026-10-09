@@ -10,15 +10,19 @@ using Firmeza.Domain.Services;
 using Firmeza.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
+using AutoMapper;
+
 namespace Firmeza.Infraestructure.Services;
 
 public class SaleService : ISaleService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public SaleService(ApplicationDbContext context)
+    public SaleService(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<SaleDto>> GetAllAsync()
@@ -26,10 +30,11 @@ public class SaleService : ISaleService
         var sales = await _context.Sales
             .Include(s => s.Customer)
             .Include(s => s.Details)
+            .ThenInclude(d => d.Product)
             .OrderByDescending(s => s.Date)
             .ToListAsync();
 
-        return sales.Select(MapToDto);
+        return _mapper.Map<IEnumerable<SaleDto>>(sales);
     }
 
     public async Task<IEnumerable<SaleDto>> GetByCustomerEmailAsync(string email)
@@ -40,11 +45,12 @@ public class SaleService : ISaleService
         var sales = await _context.Sales
             .Include(s => s.Customer)
             .Include(s => s.Details)
+            .ThenInclude(d => d.Product)
             .Where(s => s.CustomerId == customer.Id)
             .OrderByDescending(s => s.Date)
             .ToListAsync();
 
-        return sales.Select(MapToDto);
+        return _mapper.Map<IEnumerable<SaleDto>>(sales);
     }
 
     public async Task<SaleDto?> GetByIdAsync(int id)
@@ -55,7 +61,7 @@ public class SaleService : ISaleService
             .ThenInclude(d => d.Product)
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        return s == null ? null : MapToDto(s);
+        return s == null ? null : _mapper.Map<SaleDto>(s);
     }
 
     public async Task<SaleDto> CreateAsync(SaleCreateDto dto, string? userEmail = null, bool isStaff = false)
@@ -288,34 +294,4 @@ public class SaleService : ISaleService
         return true;
     }
 
-    private static SaleDto MapToDto(Sale s)
-    {
-        var breakdown = InventoryCalculator.SplitTaxInclusive(s.TotalAmount);
-
-        return new SaleDto
-        {
-            Id = s.Id,
-            SaleNumber = string.IsNullOrEmpty(s.SaleNumber) ? $"VTA-{s.Date:yyyyMMdd}-{s.Id:D4}" : s.SaleNumber,
-            Date = s.Date,
-            CustomerId = s.CustomerId,
-            CustomerName = s.Customer?.Name ?? "Cliente General",
-            Status = s.Status.ToString(),
-            StatusLabel = SaleStatusRules.Label(s.Status),
-            SubtotalNeto = breakdown.SubtotalBase,
-            TaxAmount = breakdown.Tax,
-            TaxRate = InventoryCalculator.TaxRate,
-            TotalAmount = s.TotalAmount,
-            ConfirmedAt = s.ConfirmedAt,
-            DeliveredAt = s.DeliveredAt,
-            CancelledAt = s.CancelledAt,
-            Details = s.Details?.Select(d => new SaleDetailDto
-            {
-                Id = d.Id,
-                ProductId = d.ProductId,
-                ProductName = d.Product?.Name ?? $"Producto #{d.ProductId}",
-                Quantity = d.Quantity,
-                UnitPrice = d.UnitPrice
-            }) ?? Enumerable.Empty<SaleDetailDto>()
-        };
-    }
 }

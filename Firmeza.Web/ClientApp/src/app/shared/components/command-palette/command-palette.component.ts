@@ -6,6 +6,7 @@ import { CommandPaletteService } from './command-palette.service';
 import { ProductsService } from '../../../core/services/products.service';
 import { CustomersService } from '../../../core/services/customers.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 interface CommandItem {
   id: string;

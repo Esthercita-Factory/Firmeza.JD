@@ -42,7 +42,7 @@ public class InventoryCalculatorTests
         SaleStatus target, 
         bool expectedAllowed)
     {
-        bool allowed = SaleStatusRules.CanTransitionTo(current, target);
+        bool allowed = SaleStatusRules.CanTransition(current, target);
         Assert.Equal(expectedAllowed, allowed);
     }
 }
